@@ -1,4 +1,6 @@
 'use client';
+
+import { useState, useEffect } from 'react';
 import { useBlockStore } from '@/store/blocks';
 
 export default function StyleEditor() {
@@ -7,35 +9,56 @@ export default function StyleEditor() {
   const updateBlock = useBlockStore((s) => s.updateBlock);
 
   const block = blocks.find((b) => b.id === selectedId);
+  const [color, setColor] = useState('#000000');
+  const [fontSize, setFontSize] = useState('16px');
+
+  // Когда выбираем новый блок — сбрасываем стили в редактор
+  useEffect(() => {
+    if (block) {
+      setColor(block.styles.color || '#000000');
+      setFontSize(String(block.styles.fontSize || '16px'));
+    }
+  }, [block]);
+
   if (!block) return <p>Выберите блок</p>;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleApply = () => {
     updateBlock(block.id, {
-      styles: { ...block.styles, [name]: value },
+      styles: {
+        ...block.styles,
+        color,
+        fontSize,
+      },
     });
   };
 
   return (
-    <div>
-      <label>
-        Цвет текста:
-        <input
-          name="color"
-          type="color"
-          value={block.styles.color}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Размер шрифта:
-        <input
-          name="fontSize"
-          type="text"
-          value={block.styles.fontSize}
-          onChange={handleChange}
-        />
-      </label>
+    <div className="p-4 border mt-4">
+      <div>
+        <label>
+          Цвет текста:
+          <input
+            type="color"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Размер шрифта:
+          <input
+            type="text"
+            value={fontSize}
+            onChange={(e) => setFontSize(e.target.value)}
+            placeholder="например, 24px"
+          />
+        </label>
+      </div>
+
+      <button onClick={handleApply} className="mt-2 bg-blue-500 text-white px-3 py-1 rounded">
+        Применить
+      </button>
     </div>
   );
 }

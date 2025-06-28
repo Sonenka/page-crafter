@@ -14,7 +14,7 @@ export default function Home() {
       <AddBlockPanel />
       {blocks.map((block) => (
         <div key={block.id} onClick={() => setSelectedBlock(block.id)}>
-          <TextBlock content={block.content}/>
+          <TextBlock content={block.content} styles={block.styles} />
         </div>
       ))}
 

@@ -30,11 +30,20 @@ export const useBlockStore = create<BlockStore>((set) => ({
   setBlocks: (blocks) => set({ blocks }),
 
   updateBlock: (id, newData) =>
-    set((state) => ({
-      blocks: state.blocks.map((block) =>
-        block.id === id ? { ...block, ...newData, styles: { ...block.styles, ...newData.styles } } : block
-      ),
-    })),
+  set((state) => ({
+    blocks: state.blocks.map((block) =>
+      block.id === id
+        ? {
+            ...block,
+            ...newData,
+            styles: {
+              ...block.styles,
+              ...(newData.styles || {}),
+            },
+          }
+        : block
+    ),
+  })),
 
   setSelectedBlock: (id) => set({ selectedBlockId: id }),
 
