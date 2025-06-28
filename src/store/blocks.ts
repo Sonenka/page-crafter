@@ -8,6 +8,7 @@ type BlockStore = {
   setBlocks: (blocks: Block[]) => void;
   updateBlock: (id: string, newData: Partial<Block>) => void;
   setSelectedBlock: (id: string | null) => void;
+  addBlock: (block: Block) => void;
 };
 
 export const useBlockStore = create<BlockStore>((set) => ({
@@ -36,4 +37,9 @@ export const useBlockStore = create<BlockStore>((set) => ({
     })),
 
   setSelectedBlock: (id) => set({ selectedBlockId: id }),
+
+  addBlock: (block) =>
+  set((state) => ({
+    blocks: [...state.blocks, block],
+  })),
 }));
