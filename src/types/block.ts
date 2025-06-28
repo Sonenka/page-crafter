@@ -4,4 +4,5 @@ export type Block = {
   id: string;
   type: BlockType;
   content: string;
+  styles: React.CSSProperties;
 };
